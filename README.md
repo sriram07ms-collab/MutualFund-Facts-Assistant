@@ -23,6 +23,25 @@ This assistant covers:
 
 ## 🚀 Quick Deploy
 
+### Option 1: GitHub Pages + Streamlit Cloud (Recommended)
+
+**Deploy landing page on GitHub Pages:**
+1. Go to repository Settings → Pages
+2. Select "GitHub Actions" as source
+3. The landing page will deploy automatically
+4. Your site: `https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/`
+
+**Deploy app on Streamlit Cloud:**
+1. Go to [share.streamlit.io](https://share.streamlit.io/)
+2. Connect your GitHub account
+3. Select this repository
+4. Add your `OPENAI_API_KEY` in Secrets
+5. Click Deploy!
+
+See [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md) for detailed instructions.
+
+### Option 2: Streamlit Cloud Only
+
 **Deploy instantly on Streamlit Cloud (Free):**
 1. Push this repository to GitHub
 2. Go to [share.streamlit.io](https://share.streamlit.io/)

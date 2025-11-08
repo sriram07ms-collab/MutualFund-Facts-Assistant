@@ -1,0 +1,45 @@
+name: Deploy to Streamlit Cloud
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Streamlit App
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Deploy to Streamlit Cloud
+      env:
+        STREAMLIT_CLOUD_TOKEN: ${{ secrets.STREAMLIT_CLOUD_TOKEN }}
+      run: |
+        echo "🚀 Streamlit Cloud deployment"
+        echo "To deploy manually:"
+        echo "1. Go to https://share.streamlit.io/"
+        echo "2. Sign in with GitHub"
+        echo "3. Select repository: sriram07ms-collab/MutualFund-Facts-Assistant"
+        echo "4. Set main file: app.py"
+        echo "5. Add OPENAI_API_KEY in secrets"
+        echo "6. Click Deploy"
+        
+    - name: Deployment Status
+      run: |
+        echo "✅ Code pushed to GitHub"
+        echo "✅ Ready for Streamlit Cloud deployment"
+        echo "📝 See STREAMLIT_CLOUD_SETUP.md for deployment instructions"
+
