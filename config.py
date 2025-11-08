@@ -6,14 +6,32 @@ from pathlib import Path
 
 # Project paths
 PROJECT_ROOT = Path(__file__).parent
+
+def _create_path(path: Path) -> bool:
+    """Attempt to create a directory path. Return True if successful."""
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+        # Verify we have write access by touching a temp file
+        test_file = path / ".write_test"
+        test_file.touch(exist_ok=True)
+        test_file.unlink(missing_ok=True)
+        return True
+    except Exception:
+        return False
+
+# Default directories (may not be writable on serverless platforms)
 DATA_DIR = PROJECT_ROOT / "data"
 VECTOR_STORE_DIR = PROJECT_ROOT / "vector_store"
 SCRAPED_DATA_DIR = DATA_DIR / "scraped"
 
-# Create directories if they don't exist
-DATA_DIR.mkdir(exist_ok=True)
-VECTOR_STORE_DIR.mkdir(exist_ok=True)
-SCRAPED_DATA_DIR.mkdir(exist_ok=True)
+# Attempt to create directories; fallback to /tmp if not writable
+if not _create_path(DATA_DIR) or not _create_path(VECTOR_STORE_DIR) or not _create_path(SCRAPED_DATA_DIR):
+    TMP_ROOT = Path(os.environ.get("TMPDIR", "/tmp")) / "mutual_fund_facts"
+    DATA_DIR = TMP_ROOT / "data"
+    VECTOR_STORE_DIR = TMP_ROOT / "vector_store"
+    SCRAPED_DATA_DIR = DATA_DIR / "scraped"
+    for path in [DATA_DIR, VECTOR_STORE_DIR, SCRAPED_DATA_DIR]:
+        path.mkdir(parents=True, exist_ok=True)
 
 # URLs to scrape
 SOURCE_URLS = {

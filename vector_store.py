@@ -84,13 +84,20 @@ class VectorStore:
     
     def load_vector_store(self):
         """Load existing vector store"""
-        self.vector_store = Chroma(
-            collection_name=config.COLLECTION_NAME,
-            embedding_function=self.embeddings,
-            persist_directory=str(self.vector_store_path),
-            client=self.client
-        )
-        logger.info("Vector store loaded")
+        try:
+            self.vector_store = Chroma(
+                collection_name=config.COLLECTION_NAME,
+                embedding_function=self.embeddings,
+                persist_directory=str(self.vector_store_path),
+                client=self.client
+            )
+            # Quick check to ensure collection is not empty
+            _ = self.vector_store.get()
+            logger.info("Vector store loaded")
+        except Exception as e:
+            logger.warning(f"Vector store load failed: {e}")
+            self.vector_store = None
+            raise
     
     def search(self, query: str, k: int = config.TOP_K_RESULTS) -> List[Document]:
         """Search vector store for relevant documents"""

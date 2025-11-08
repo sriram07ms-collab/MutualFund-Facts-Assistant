@@ -10,6 +10,7 @@ import logging
 import config
 from vector_store import VectorStore
 from datetime import datetime
+from data_collector import DataCollector
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,7 +25,21 @@ class RAGPipeline:
             max_tokens=config.MAX_TOKENS
         )
         self.vector_store = VectorStore()
-        self.vector_store.load_vector_store()
+        self._ensure_vector_store()
+
+    def _ensure_vector_store(self):
+        """Ensure the vector store is available; build if missing."""
+        try:
+            self.vector_store.load_vector_store()
+        except Exception:
+            logger.info("Vector store not found. Collecting data and rebuilding.")
+            collector = DataCollector()
+            data = collector.load_scraped_data()
+            if not data:
+                data = collector.collect_all_sources()
+            documents = self.vector_store.create_documents_from_data(data)
+            self.vector_store.build_vector_store(documents, recreate=True)
+            self.vector_store.load_vector_store()
         
     def is_advice_request(self, query: str) -> bool:
         """Check if query is asking for investment advice"""
