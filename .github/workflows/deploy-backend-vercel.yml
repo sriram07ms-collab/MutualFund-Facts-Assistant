@@ -22,25 +22,7 @@ jobs:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-    
-    steps:
-    - name: Check required secrets
-      id: secrets_check
-      shell: bash
-      run: |
-        missing="false"
-        if [ -z "${VERCEL_TOKEN}" ] || [ -z "${VERCEL_ORG_ID}" ] || [ -z "${VERCEL_PROJECT_ID}" ]; then
-          missing="true"
-        fi
-        echo "missing=$missing" >> "$GITHUB_OUTPUT"
-
-    - name: Skip deployment
-      if: ${{ steps.secrets_check.outputs.missing == 'true' }}
-      run: |
-        echo "⚠️  Skipping Vercel deployment because required secrets are not configured."
-        echo "Set VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, and OPENAI_API_KEY to enable this workflow."
-        exit 0
-
+  
     - name: Checkout code
       if: ${{ steps.secrets_check.outputs.missing != 'true' }}
       uses: actions/checkout@v4
