@@ -211,45 +211,6 @@
             font-size: 0.9rem;
         }
         
-        .deployment-note {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-size: 0.9rem;
-        }
-        
-        .deployment-note strong {
-            color: #1976d2;
-        }
-        
-        .api-selector {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-        
-        .api-selector label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .api-selector select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        .api-selector select:focus {
-            border-color: #00D09C;
-            outline: none;
-        }
     </style>
 </head>
 <body>
@@ -264,29 +225,8 @@
                 <strong>⚠️ Facts-only. No investment advice.</strong> This assistant provides factual information from official AMC, SEBI, and AMFI sources. Always consult a registered investment advisor for investment decisions.
             </div>
             
-            <div class="deployment-note">
-                <strong>📌 Note:</strong> This is a static frontend hosted on GitHub Pages. To use the chat functionality, you need to deploy the API backend on Vercel or Netlify. 
-                <br><br>
-                <strong>Quick Deploy Options:</strong>
-                <ul style="margin-top: 10px; padding-left: 20px;">
-                    <li><a href="https://vercel.com/" target="_blank" style="color: #1976d2;">Deploy on Vercel</a> - Full-stack deployment</li>
-                    <li><a href="https://app.netlify.com/" target="_blank" style="color: #1976d2;">Deploy on Netlify</a> - Full-stack deployment</li>
-                    <li><a href="https://share.streamlit.io/" target="_blank" style="color: #1976d2;">Deploy on Streamlit Cloud</a> - Streamlit app</li>
-                </ul>
-            </div>
-            
-            <div class="api-selector">
-                <label for="apiUrl">API Endpoint:</label>
-                <select id="apiUrl" onchange="updateApiUrl()">
-                    <option value="">Select API endpoint...</option>
-                    <option value="/api/query">Local API (if deployed with backend)</option>
-                    <option value="https://mutual-fund-facts-assistant.vercel.app/api/query">Vercel Deployment (Default)</option>
-                    <option value="https://mutual-fund-facts-assistant.netlify.app/.netlify/functions/query">Netlify Deployment</option>
-                </select>
-                <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
-                    💡 The backend API is automatically deployed via GitHub Actions. Select the deployment platform above.
-                    <br>To deploy manually, see <a href="https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/blob/main/backend-deployment-setup.md" target="_blank" style="color: #00B887;">backend-deployment-setup.md</a>
-                </p>
+            <div class="deployment-note" style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; border-radius: 5px; margin: 20px 0; font-size: 0.9rem;">
+                <strong>📌 Note:</strong> Chat functionality is live. Responses are served from the secure backend deployed on Vercel using only official mutual fund sources.
             </div>
             
             <div class="chat-container" id="chatContainer">
@@ -338,33 +278,7 @@
     </div>
     
     <script>
-        // Get API URL from selector or use default
-        let API_URL = '';
-        
-        // Try to get API URL from localStorage or use default
-        const savedApiUrl = localStorage.getItem('apiUrl');
-        if (savedApiUrl) {
-            API_URL = savedApiUrl;
-            document.getElementById('apiUrl').value = savedApiUrl;
-        } else {
-            // Default to Vercel deployment
-            API_URL = 'https://mutual-fund-facts-assistant.vercel.app/api/query';
-            document.getElementById('apiUrl').value = API_URL;
-        }
-        
-        function updateApiUrl() {
-            const selector = document.getElementById('apiUrl');
-            API_URL = selector.value;
-            if (API_URL) {
-                localStorage.setItem('apiUrl', API_URL);
-                console.log('API URL updated to:', API_URL);
-            }
-        }
-        
-        // Try to detect if we're on GitHub Pages and suggest external API
-        if (window.location.hostname.includes('github.io')) {
-            console.log('GitHub Pages detected. Using external API endpoint.');
-        }
+        const API_URL = 'https://mutual-fund-facts-assistant.vercel.app/api/query';
         
         function addMessage(text, isUser = false) {
             const container = document.getElementById('chatContainer');
@@ -417,17 +331,12 @@
             const container = document.getElementById('chatContainer');
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
-            errorDiv.innerHTML = `Error: ${message}<br><small>Please configure the API endpoint in the selector above or deploy the backend on Vercel/Netlify.</small>`;
+            errorDiv.innerHTML = `Error: ${message}<br><small>Please try again shortly or contact support if the issue persists.</small>`;
             container.appendChild(errorDiv);
             container.scrollTop = container.scrollHeight;
         }
         
         async function sendQuery() {
-            if (!API_URL) {
-                showError('Please select an API endpoint from the dropdown above, or deploy the backend API on Vercel/Netlify.');
-                return;
-            }
-            
             const input = document.getElementById('queryInput');
             const query = input.value.trim();
             

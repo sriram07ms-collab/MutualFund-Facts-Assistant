@@ -116,7 +116,7 @@ After deploying the backend, update the frontend to use the API URL:
 
 ### Option 1: Update docs/index.html
 
-Edit `docs/index.html` and update the API URL selector:
+Edit `docs/index.html` and update the `API_URL` constant:
 
 ```javascript
 // Add your deployed API URL

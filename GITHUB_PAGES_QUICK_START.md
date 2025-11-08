@@ -33,10 +33,9 @@ GitHub Pages only hosts **static files**. For full chat functionality, you need 
    - Follow: [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md) or [NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md)
    - Get your API URL
 
-2. **Update API URL in Frontend**
+2. **Update API URL in Frontend (Optional)**
    - Edit `docs/index.html`
-   - Update the API URL in the selector dropdown
-   - Or set it directly in the JavaScript code
+   - Update the `API_URL` constant in the JavaScript section if you use your own backend URL
    - Commit and push
 
 ### Option B: Use Streamlit Cloud

@@ -52,7 +52,6 @@ GitHub Pages only hosts **static files** (HTML, CSS, JavaScript). The chat funct
 Edit `docs/index.html` and update the API URL:
 
 ```javascript
-// In the API selector or directly in code
 const API_URL = 'https://your-vercel-app.vercel.app/api/query';
 // or
 const API_URL = 'https://your-netlify-app.netlify.app/.netlify/functions/query';

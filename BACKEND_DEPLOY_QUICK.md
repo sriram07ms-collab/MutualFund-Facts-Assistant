@@ -38,20 +38,15 @@ Deploy your backend API in 5 minutes using Vercel (easiest option)!
    - API endpoint: `https://your-project.vercel.app/api/query`
 
 2. **Update Frontend (Optional)**
-   - The frontend already has a default Vercel URL
-   - Or update `docs/index.html` with your specific URL
-   - The API selector in the frontend will let you choose the endpoint
+   - The GitHub Pages frontend already points to the Vercel backend
+   - Update `docs/index.html` only if you want to use a different API URL
 
 ### Step 3: Test
 
 1. **Visit Your GitHub Pages Site**
    - https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/
 
-2. **Select API Endpoint**
-   - Use the dropdown to select your Vercel deployment
-   - Or it will use the default
-
-3. **Test the Chat**
+2. **Test the Chat**
    - Ask a question
    - Verify it works!
 
@@ -71,13 +66,25 @@ For automatic deployments via GitHub Actions:
    - Create a new token
    - Get `ORG_ID` and `PROJECT_ID` from project settings
 
-2. **Add GitHub Secrets**
-   - Go to: https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/settings/secrets/actions
-   - Add:
-     - `VERCEL_TOKEN`
-     - `VERCEL_ORG_ID`
-     - `VERCEL_PROJECT_ID`
-     - `OPENAI_API_KEY`
+2. **Add GitHub Secrets** (in your existing repository)
+   
+   **Where to add them:**
+   - Go to your GitHub repository: https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant
+   - Click on **Settings** (top menu bar of the repository)
+   - In the left sidebar, click **Secrets and variables** → **Actions**
+   - Click **New repository secret** button
+   
+   **Add each secret one by one:**
+   - Click "New repository secret"
+   - Name: `VERCEL_TOKEN` → Value: (paste your Vercel token) → Click "Add secret"
+   - Click "New repository secret" again
+   - Name: `VERCEL_ORG_ID` → Value: (paste your Vercel Org ID) → Click "Add secret"
+   - Click "New repository secret" again
+   - Name: `VERCEL_PROJECT_ID` → Value: (paste your Vercel Project ID) → Click "Add secret"
+   - Click "New repository secret" again
+   - Name: `OPENAI_API_KEY` → Value: (paste your OpenAI API key) → Click "Add secret"
+   
+   **Note:** These are NOT environment variables - they are GitHub repository secrets used by GitHub Actions workflows.
 
 3. **Automatic Deployment**
    - The workflow will deploy on every push
