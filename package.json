@@ -1,0 +1,17 @@
+{
+  "name": "mutual-fund-facts-assistant",
+  "version": "1.0.0",
+  "description": "RAG-based FAQ assistant for mutual fund schemes",
+  "scripts": {
+    "build": "echo 'No build step required for static site'"
+  },
+  "keywords": [
+    "mutual-funds",
+    "rag",
+    "chatbot",
+    "faq"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+

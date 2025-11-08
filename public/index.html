@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutual Fund Facts Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #00D09C 0%, #00B887 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .chat-container {
+            margin: 30px 0;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: #E3F2FD;
+            margin-left: auto;
+            border-left: 4px solid #2196F3;
+            text-align: right;
+        }
+        
+        .assistant-message {
+            background: white;
+            border-left: 4px solid #00D09C;
+        }
+        
+        .source-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #00B887;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .source-link:hover {
+            text-decoration: underline;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .input-field {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .input-field:focus {
+            border-color: #00D09C;
+        }
+        
+        .send-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00D09C 0%, #00B887 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 208, 156, 0.4);
+        }
+        
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #00D09C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .example-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .example-btn {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .example-btn:hover {
+            background: #00D09C;
+            color: white;
+            border-color: #00D09C;
+        }
+        
+        .info {
+            background: #fff4e6;
+            border-left: 4px solid #ffa726;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        .info strong {
+            color: #e65100;
+        }
+        
+        .error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #c62828;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Mutual Fund Facts Assistant</h1>
+            <p>Get factual answers about mutual fund schemes from official sources</p>
+        </div>
+        
+        <div class="content">
+            <div class="info">
+                <strong>⚠️ Facts-only. No investment advice.</strong> This assistant provides factual information from official AMC, SEBI, and AMFI sources. Always consult a registered investment advisor for investment decisions.
+            </div>
+            
+            <div class="chat-container" id="chatContainer">
+                <div class="assistant-message">
+                    <strong>Assistant:</strong><br><br>
+                    Hello! I'm your Mutual Fund Facts Assistant. I can answer factual questions about mutual fund schemes like expense ratios, exit loads, minimum SIP amounts, lock-in periods, and more. Ask me anything!
+                </div>
+            </div>
+            
+            <div class="example-questions">
+                <div class="example-btn" onclick="askQuestion('What is the expense ratio of Nippon India Large Cap Fund?')">
+                    💰 Expense Ratio?
+                </div>
+                <div class="example-btn" onclick="askQuestion('What is the minimum SIP amount?')">
+                    📈 Minimum SIP?
+                </div>
+                <div class="example-btn" onclick="askQuestion('How to download capital gains statement?')">
+                    📄 Download Statement?
+                </div>
+                <div class="example-btn" onclick="askQuestion('What is the lock-in period for ELSS?')">
+                    🔒 ELSS Lock-in?
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    class="input-field" 
+                    id="queryInput" 
+                    placeholder="Ask a question about mutual funds..."
+                    onkeypress="if(event.key === 'Enter') sendQuery()"
+                >
+                <button class="send-button" id="sendButton" onclick="sendQuery()">
+                    Send
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Disclaimer:</strong> MUTUAL FUND INVESTMENTS ARE SUBJECT TO MARKET RISKS. READ ALL SCHEME RELATED DOCUMENTS CAREFULLY.</p>
+            <p style="margin-top: 10px;">This assistant provides factual information only and does not constitute investment advice.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-detect API URL based on deployment platform
+        const API_URL = window.location.hostname.includes('netlify') 
+            ? '/.netlify/functions/query'
+            : '/api/query';
+        
+        function addMessage(text, isUser = false) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
+            
+            if (isUser) {
+                messageDiv.innerHTML = `<strong>You:</strong><br>${text}`;
+            } else {
+                const lines = text.split('\n\n');
+                let html = `<strong>Assistant:</strong><br><br>`;
+                
+                lines.forEach(line => {
+                    if (line.startsWith('Source:')) {
+                        const url = line.replace('Source:', '').trim();
+                        html += `<a href="${url}" target="_blank" class="source-link">📎 View Source</a>`;
+                    } else if (line.startsWith('Last updated')) {
+                        html += `<br><small style="color: #666;">${line}</small>`;
+                    } else {
+                        html += `<p>${line}</p>`;
+                    }
+                });
+                
+                messageDiv.innerHTML = html;
+            }
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function showLoading() {
+            const container = document.getElementById('chatContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant-message';
+            loadingDiv.id = 'loadingMessage';
+            loadingDiv.innerHTML = '<div class="loading"></div> Searching official sources...';
+            container.appendChild(loadingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function hideLoading() {
+            const loadingMsg = document.getElementById('loadingMessage');
+            if (loadingMsg) {
+                loadingMsg.remove();
+            }
+        }
+        
+        function showError(message) {
+            hideLoading();
+            const container = document.getElementById('chatContainer');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = `Error: ${message}`;
+            container.appendChild(errorDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        async function sendQuery() {
+            const input = document.getElementById('queryInput');
+            const query = input.value.trim();
+            
+            if (!query) return;
+            
+            // Disable input
+            input.disabled = true;
+            document.getElementById('sendButton').disabled = true;
+            
+            // Add user message
+            addMessage(query, true);
+            input.value = '';
+            
+            // Show loading
+            showLoading();
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                hideLoading();
+                
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    addMessage(data.answer, false);
+                }
+                
+            } catch (error) {
+                hideLoading();
+                showError('Failed to get response. Please try again or check if the API is configured correctly.');
+                console.error('Error:', error);
+            } finally {
+                // Re-enable input
+                input.disabled = false;
+                document.getElementById('sendButton').disabled = false;
+                input.focus();
+            }
+        }
+        
+        function askQuestion(question) {
+            document.getElementById('queryInput').value = question;
+            sendQuery();
+        }
+    </script>
+</body>
+</html>
+

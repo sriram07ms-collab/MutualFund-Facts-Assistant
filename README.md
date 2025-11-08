@@ -23,13 +23,34 @@ This assistant covers:
 
 ## 🚀 Quick Deploy
 
-### Option 1: GitHub Pages + Streamlit Cloud (Recommended)
+### Option 1: Vercel (Recommended - Full Stack)
+
+**Deploy on Vercel (Free):**
+1. Go to [vercel.com](https://vercel.com/)
+2. Sign in with GitHub
+3. Import repository: `sriram07ms-collab/MutualFund-Facts-Assistant`
+4. Set environment variable: `OPENAI_API_KEY`
+5. Deploy!
+
+See [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md) for detailed instructions.
+
+### Option 2: Netlify (Recommended - Full Stack)
+
+**Deploy on Netlify (Free):**
+1. Go to [netlify.com](https://app.netlify.com/)
+2. Sign in with GitHub
+3. Import repository: `sriram07ms-collab/MutualFund-Facts-Assistant`
+4. Set environment variable: `OPENAI_API_KEY`
+5. Deploy!
+
+See [NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md) for detailed instructions.
+
+### Option 3: GitHub Pages + Streamlit Cloud
 
 **Deploy landing page on GitHub Pages:**
 1. Go to repository Settings → Pages
 2. Select "GitHub Actions" as source
 3. The landing page will deploy automatically
-4. Your site: `https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/`
 
 **Deploy app on Streamlit Cloud:**
 1. Go to [share.streamlit.io](https://share.streamlit.io/)
@@ -39,18 +60,6 @@ This assistant covers:
 5. Click Deploy!
 
 See [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md) for detailed instructions.
-
-### Option 2: Streamlit Cloud Only
-
-**Deploy instantly on Streamlit Cloud (Free):**
-1. Push this repository to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io/)
-3. Connect your GitHub account
-4. Select this repository
-5. Add your `OPENAI_API_KEY` in Secrets
-6. Click Deploy!
-
-The app will automatically collect data on first run. See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
 
 ## Setup (Local Development)
 

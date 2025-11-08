@@ -33,6 +33,12 @@ vector_store/
 *.db
 *.sqlite
 
+# Vercel
+.vercel
+
+# Netlify
+.netlify
+
 # IDE
 .vscode/
 .idea/
