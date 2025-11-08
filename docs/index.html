@@ -276,15 +276,16 @@
             </div>
             
             <div class="api-selector">
-                <label for="apiUrl">API Endpoint (for testing with external API):</label>
+                <label for="apiUrl">API Endpoint:</label>
                 <select id="apiUrl" onchange="updateApiUrl()">
                     <option value="">Select API endpoint...</option>
                     <option value="/api/query">Local API (if deployed with backend)</option>
-                    <option value="https://your-vercel-app.vercel.app/api/query">Vercel Deployment</option>
-                    <option value="https://your-netlify-app.netlify.app/.netlify/functions/query">Netlify Deployment</option>
+                    <option value="https://mutual-fund-facts-assistant.vercel.app/api/query">Vercel Deployment (Default)</option>
+                    <option value="https://mutual-fund-facts-assistant.netlify.app/.netlify/functions/query">Netlify Deployment</option>
                 </select>
                 <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
-                    💡 Update the API URL in the select above or edit the code to point to your deployed API endpoint.
+                    💡 The backend API is automatically deployed via GitHub Actions. Select the deployment platform above.
+                    <br>To deploy manually, see <a href="https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/blob/main/backend-deployment-setup.md" target="_blank" style="color: #00B887;">backend-deployment-setup.md</a>
                 </p>
             </div>
             
@@ -340,17 +341,29 @@
         // Get API URL from selector or use default
         let API_URL = '';
         
+        // Try to get API URL from localStorage or use default
+        const savedApiUrl = localStorage.getItem('apiUrl');
+        if (savedApiUrl) {
+            API_URL = savedApiUrl;
+            document.getElementById('apiUrl').value = savedApiUrl;
+        } else {
+            // Default to Vercel deployment
+            API_URL = 'https://mutual-fund-facts-assistant.vercel.app/api/query';
+            document.getElementById('apiUrl').value = API_URL;
+        }
+        
         function updateApiUrl() {
             const selector = document.getElementById('apiUrl');
             API_URL = selector.value;
             if (API_URL) {
+                localStorage.setItem('apiUrl', API_URL);
                 console.log('API URL updated to:', API_URL);
             }
         }
         
         // Try to detect if we're on GitHub Pages and suggest external API
         if (window.location.hostname.includes('github.io')) {
-            console.log('GitHub Pages detected. Please configure API endpoint.');
+            console.log('GitHub Pages detected. Using external API endpoint.');
         }
         
         function addMessage(text, isUser = false) {

@@ -1,0 +1,56 @@
+name: Deploy Backend to Netlify
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'netlify/**'
+      - 'rag_pipeline.py'
+      - 'vector_store.py'
+      - 'data_collector.py'
+      - 'config.py'
+      - 'requirements.txt'
+      - 'netlify.toml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Backend API to Netlify
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Netlify CLI
+      run: npm install -g netlify-cli
+    
+    - name: Deploy to Netlify
+      run: |
+        netlify deploy --prod --dir=public --functions=netlify/functions
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    
+    - name: Get Deployment URL
+      id: netlify
+      run: |
+        DEPLOYMENT_URL=$(netlify status --json | jq -r '.site.url')
+        echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+    
+    - name: Update Frontend with API URL
+      run: |
+        echo "✅ Backend deployed successfully!"
+        echo "API URL: ${{ steps.netlify.outputs.url }}/.netlify/functions/query"
+        echo "Update docs/index.html with this URL"
+

@@ -1,0 +1,33 @@
+name: Deploy Backend to Railway
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/**'
+      - 'rag_pipeline.py'
+      - 'vector_store.py'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Backend API to Railway
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Railway CLI
+      run: |
+        npm install -g @railway/cli
+    
+    - name: Deploy to Railway
+      run: |
+        railway up --service api
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
