@@ -1,181 +1,72 @@
 # GitHub Pages Deployment Guide
 
-This guide explains how to deploy the Mutual Fund Facts Assistant frontend on GitHub Pages.
+This guide explains how to publish the Mutual Fund Facts Assistant frontend on GitHub Pages and connect it to the backend API hosted on Vercel (or any other platform you choose).
 
-## 🚀 Quick Deploy
+## 📋 Prerequisites
 
-### Step 1: Enable GitHub Pages
+- GitHub repository: `sriram07ms-collab/MutualFund-Facts-Assistant`
+- Backend API deployed (default: Vercel deployment included with this project)
 
-1. **Go to Repository Settings**
-   - Visit: https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/settings/pages
+## 🚀 Step-by-Step Setup
 
-2. **Configure GitHub Pages**
-   - Under "Source", select: **GitHub Actions**
-   - Click **Save**
+### 1. Enable GitHub Pages
 
-3. **Verify Deployment**
-   - Go to **Actions** tab
-   - You'll see "Deploy GitHub Pages" workflow running
-   - Wait 1-2 minutes for deployment to complete
+1. Open repository settings:  
+   https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/settings
+2. Scroll to **Pages**
+3. Under **Source**, choose **GitHub Actions**
+4. Click **Save**
 
-4. **Access Your Site**
-   - Your site will be live at:
-     ```
-     https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/
-     ```
+The workflow in `.github/workflows/pages.yml` will run automatically. Monitor it in the **Actions** tab. When the run succeeds, your site is live at:
 
-## ⚠️ Important Note
-
-GitHub Pages only hosts **static files** (HTML, CSS, JavaScript). The chat functionality requires a backend API, which cannot run on GitHub Pages.
-
-### Options for Full Functionality
-
-1. **Deploy Backend Separately**
-   - Deploy API on Vercel or Netlify
-   - Update API URL in the frontend
-   - Full functionality available
-
-2. **Use Streamlit Cloud**
-   - Deploy full Streamlit app on Streamlit Cloud
-   - Link to it from GitHub Pages
-   - Complete solution
-
-3. **Use Vercel/Netlify for Full Stack**
-   - Deploy both frontend and backend together
-   - Single deployment
-   - Recommended for production
-
-## 🔧 Configuring API Endpoint
-
-### Option 1: Update in HTML (For GitHub Pages)
-
-Edit `docs/index.html` and update the API URL:
-
-```javascript
-const API_URL = 'https://your-vercel-app.vercel.app/api/query';
-// or
-const API_URL = 'https://your-netlify-app.netlify.app/.netlify/functions/query';
-```
-
-### Option 2: Use Environment Variable (For Vercel/Netlify)
-
-Set environment variable in deployment platform:
-- `API_URL` = your API endpoint URL
-
-## 📋 Project Structure
-
-```
-MutualFund-Facts-Assistant/
-├── docs/
-│   └── index.html          # GitHub Pages frontend
-├── public/
-│   └── index.html          # Vercel/Netlify frontend
-├── api/
-│   └── query.py            # Vercel serverless function
-├── netlify/
-│   └── functions/
-│       └── query.py        # Netlify serverless function
-└── .github/workflows/
-    └── pages.yml           # GitHub Pages deployment workflow
-```
-
-## 🎯 Deployment Workflow
-
-The GitHub Actions workflow (`.github/workflows/pages.yml`) automatically:
-1. Deploys on every push to `main` branch
-2. Builds and deploys the `docs/` directory
-3. Makes it available on GitHub Pages
-
-## 🔄 Updating the Site
-
-1. **Make changes** to `docs/index.html`
-2. **Commit and push** to GitHub:
-   ```bash
-   git add docs/index.html
-   git commit -m "Update landing page"
-   git push origin main
-   ```
-3. **GitHub Pages automatically redeploys**
-   - Go to Actions tab to see deployment status
-   - Site updates in 1-2 minutes
-
-## 🌐 Your URLs
-
-After deployment:
-
-1. **GitHub Pages Site:**
-   ```
-   https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/
-   ```
-
-2. **API Endpoint** (if deployed separately):
-   - Vercel: `https://your-vercel-app.vercel.app/api/query`
-   - Netlify: `https://your-netlify-app.netlify.app/.netlify/functions/query`
-
-## 🐛 Troubleshooting
-
-### GitHub Pages Not Deploying
-
-1. **Check GitHub Actions**
-   - Go to "Actions" tab
-   - Check for workflow errors
-   - Review deployment logs
-
-2. **Verify Configuration**
-   - Settings → Pages → Source should be "GitHub Actions"
-   - Verify `docs/index.html` exists
-   - Check file is committed and pushed
-
-3. **Check Permissions**
-   - Verify GitHub Pages is enabled
-   - Check workflow permissions
-
-### API Not Working
-
-1. **Verify API is Deployed**
-   - Check Vercel/Netlify deployment
-   - Verify API endpoint is accessible
-
-2. **Update API URL**
-   - Edit `docs/index.html`
-   - Update API URL in selector or code
-   - Commit and push changes
-
-3. **Check CORS**
-   - Verify API allows requests from GitHub Pages domain
-   - Check API CORS settings
-
-## ✅ Checklist
-
-- [ ] GitHub Pages enabled in repository settings
-- [ ] GitHub Actions workflow deployed successfully
-- [ ] Landing page accessible at GitHub Pages URL
-- [ ] API deployed on Vercel/Netlify (if using chat)
-- [ ] API URL configured in frontend
-- [ ] All links working correctly
-- [ ] Mobile responsiveness tested
-
-## 🎉 Success!
-
-Once deployed, your GitHub Pages site will be live at:
 ```
 https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/
 ```
 
-## 📚 Additional Resources
+### 2. (Optional) Use a Custom API Endpoint
 
-- [GitHub Pages Documentation](https://docs.github.com/en/pages)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Vercel Deployment](VERCEL_DEPLOY.md)
-- [Netlify Deployment](NETLIFY_DEPLOY.md)
+The frontend defaults to the shared Vercel backend (`https://mutual-fund-facts-assistant.vercel.app/api/query`). To point to a different backend:
 
-## 🆘 Support
+1. Edit `docs/index.html`
+2. Update the line:
+   ```javascript
+   const API_URL = 'https://mutual-fund-facts-assistant.vercel.app/api/query';
+   ```
+3. Commit and push the change  
+   GitHub Pages will redeploy automatically.
 
-For issues:
-1. Check GitHub Actions logs
-2. Verify repository settings
-3. Review deployment documentation
-4. Check API deployment status
+## 🔄 Automatic Updates
+
+- Every push to `main` triggers the Pages workflow
+- The site is rebuilt and redeployed automatically
+- No manual steps required after you push changes
+
+## 🧩 Customizing the Frontend
+
+- Modify copy, styling, or layout in `docs/index.html`
+- Add new sections (FAQs, contact, etc.) directly in the HTML
+- CSS lives inside the `<style>` block at the top of the file
+
+## ✅ Checklist
+
+- [ ] GitHub Pages enabled in repository settings  
+- [ ] Pages workflow succeeded  
+- [ ] Frontend loads at the GitHub Pages URL  
+- [ ] Backend API reachable (default Vercel endpoint)  
+- [ ] `API_URL` updated if you use your own backend  
+
+## 🐛 Troubleshooting
+
+- **Pages build failing?** Check the run logs in the **Actions** tab  
+- **Site not updating?** Make sure you committed your changes and the workflow re-ran  
+- **API error in UI?** Verify your backend deployment and the `API_URL` value  
+
+## 📚 Related Docs
+
+- [backend-deployment-setup.md](backend-deployment-setup.md) – deploying the API  
+- [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md) – detailed Vercel steps  
+- [NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md) – Netlify option  
+- [DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md) – overall view
 
 Happy deploying! 🚀
 

@@ -17,7 +17,7 @@ A RAG-based FAQ assistant that answers factual questions about mutual fund schem
 - **RAG Pipeline**: Uses LangChain + ChromaDB for vector storage and retrieval
 - **Web Scraping**: BeautifulSoup-based scraper for official sources
 - **LLM Integration**: OpenAI GPT-4 for generating responses
-- **Streamlit UI**: Modern, responsive web interface
+- **Static Web UI**: Modern, responsive HTML/CSS frontend hosted on GitHub Pages
 
 ### ✅ Safety & Compliance
 - **No PII Collection**: Does not accept or store personal identifiable information
@@ -29,7 +29,6 @@ A RAG-based FAQ assistant that answers factual questions about mutual fund schem
 
 ```
 MutualFund-Facts-Assistant/
-├── app.py                  # Streamlit UI application
 ├── config.py              # Configuration settings
 ├── data_collector.py      # Web scraper for official sources
 ├── vector_store.py        # Vector database setup and management
@@ -108,7 +107,7 @@ MutualFund-Facts-Assistant/
 2. Set OpenAI API key in `.env` file
 3. Collect data: `python data_collector.py`
 4. Build vector store: `python vector_store.py`
-5. Run app: `streamlit run app.py`
+5. Open the web UI: launch a simple HTTP server and visit `http://localhost:8080/docs/index.html`
 
 See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 

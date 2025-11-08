@@ -73,26 +73,6 @@ Choose your preferred platform and deploy in minutes!
 
 ---
 
-### Option 3: GitHub Pages + Streamlit Cloud 📄
-
-**Best for**: Separate landing page and app
-
-1. **GitHub Pages**
-   - Go to repository Settings → Pages
-   - Source: GitHub Actions
-   - Landing page: `https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/`
-
-2. **Streamlit Cloud**
-   - Go to: https://share.streamlit.io/
-   - Sign in with GitHub
-   - Import repository
-   - Add `OPENAI_API_KEY` in secrets
-   - Deploy
-
-**Detailed guide**: [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
-
----
-
 ## ⚙️ Setup After Deployment
 
 ### First Request
@@ -149,7 +129,7 @@ Optional:
 |----------|------|------|
 | **Vercel** | Fast, great DX, auto-deploy | Serverless timeout limits |
 | **Netlify** | Easy setup, good free tier | Serverless timeout limits |
-| **Streamlit Cloud** | Native Streamlit support | Separate from GitHub Pages |
+| **GitHub Pages + Backend** | Free static hosting + flexible backend | Requires separate backend deployment |
 
 ## ✅ Checklist
 
@@ -174,7 +154,7 @@ Once deployed, you'll have:
 
 - Vercel: [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md)
 - Netlify: [NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md)
-- GitHub Pages: [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
+- GitHub Pages: [GITHUB_PAGES_DEPLOY.md](GITHUB_PAGES_DEPLOY.md)
 - General: [DEPLOYMENT.md](DEPLOYMENT.md)
 
 ## 🆘 Support

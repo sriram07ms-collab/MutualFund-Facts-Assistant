@@ -1,199 +1,61 @@
 # Deployment Guide
 
-This guide explains how to deploy the Mutual Fund Facts Assistant to production with real-time data.
+This guide covers the recommended deployment paths for the Mutual Fund Facts Assistant.
 
-## Deployment Options
+## 1. GitHub Pages + Vercel (Recommended)
 
-### Option 1: Streamlit Cloud (Recommended - Free)
+- **Frontend**: GitHub Pages hosts `docs/index.html`
+- **Backend**: Vercel hosts the serverless API (`api/query.py`)
 
-Streamlit Cloud is the easiest way to deploy Streamlit apps for free.
+### Steps
+1. Enable GitHub Pages (Settings → Pages → Source: GitHub Actions)
+2. Import the repository into Vercel and set `OPENAI_API_KEY`
+3. Deploy – the default Vercel deployment URL is embedded in the frontend
+4. (Optional) Update `API_URL` in `docs/index.html` with your own Vercel URL
 
-#### Steps:
+See [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md) and [GITHUB_PAGES_DEPLOY.md](GITHUB_PAGES_DEPLOY.md) for details.
 
-1. **Push code to GitHub** (already done)
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
+## 2. GitHub Pages + Netlify
 
-2. **Deploy on Streamlit Cloud**:
-   - Go to [https://share.streamlit.io/](https://share.streamlit.io/)
-   - Sign in with your GitHub account
-   - Click "New app"
-   - Select your repository: `sriram07ms-collab/MutualFund-Facts-Assistant`
-   - Set main file path: `app.py`
-   - Add secrets (see Environment Variables section below)
-   - Click "Deploy"
+- Same approach as above, but the backend API lives on Netlify
+- Update `API_URL` with the Netlify function endpoint `/.netlify/functions/query`
 
-3. **Configure Environment Variables**:
-   - In Streamlit Cloud, go to App settings → Secrets
-   - Add:
-     ```
-     OPENAI_API_KEY=your_openai_api_key_here
-     ```
+See [NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md) for details.
 
-4. **Set up Data Refresh**:
-   - The app will automatically collect data on first run
-   - For scheduled updates, use GitHub Actions (see below)
+## 3. Railway / Render
 
-#### Streamlit Cloud Advantages:
-- ✅ Free for public repos
-- ✅ Automatic HTTPS
-- ✅ Easy deployment
-- ✅ Built-in secret management
-- ✅ Automatic updates on git push
-
-### Option 2: Railway.app
-
-Railway is a modern deployment platform with good free tier.
-
-#### Steps:
-
-1. **Install Railway CLI**:
-   ```bash
-   npm i -g @railway/cli
-   railway login
-   ```
-
-2. **Deploy**:
-   ```bash
-   railway init
-   railway up
-   ```
-
-3. **Set Environment Variables**:
-   ```bash
-   railway variables set OPENAI_API_KEY=your_key
-   ```
-
-### Option 3: Render.com
-
-Render offers free tier with some limitations.
-
-#### Steps:
-
-1. Connect your GitHub repository to Render
-2. Create a new Web Service
-3. Set build command: `pip install -r requirements.txt && python data_collector.py && python vector_store.py`
-4. Set start command: `streamlit run app.py --server.port=$PORT --server.address=0.0.0.0`
-5. Add environment variables in Render dashboard
-
-## Automated Data Refresh
-
-### Using GitHub Actions
-
-The repository includes a GitHub Actions workflow (`.github/workflows/data-refresh.yml`) that:
-- Runs daily at 2 AM UTC
-- Collects fresh data from official sources
-- Rebuilds the vector store
-- Commits updates to the repository
-
-#### Setup:
-
-1. **Add GitHub Secret**:
-   - Go to repository Settings → Secrets and variables → Actions
-   - Add secret: `OPENAI_API_KEY` with your API key
-
-2. **Enable Workflow**:
-   - The workflow is already configured
-   - It will run automatically on the schedule
-   - You can also trigger it manually from Actions tab
-
-### Manual Data Refresh
-
-Users can refresh data from the app's sidebar:
-- Click "🔄 Refresh Data & Rebuild" button
-- The app will collect fresh data and rebuild the vector store
+These platforms can host the Python API if you prefer a containerized deployment.  
+Use the provided scripts to collect data and build the vector store during build/startup.
 
 ## Environment Variables
 
-Required environment variables:
-
-```bash
+Set at least:
+```
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-Optional variables (can be set in `config.py`):
-- `EMBEDDING_MODEL` - Default: `text-embedding-3-small`
-- `LLM_MODEL` - Default: `gpt-4-turbo-preview`
-- `CHUNK_SIZE` - Default: `1000`
-- `CHUNK_OVERLAP` - Default: `200`
+Optional overrides live in `config.py`.
 
-## Data Storage
+## Automated Data Refresh
 
-### For Streamlit Cloud:
-- Data is stored in the app's file system
-- Data persists between deployments
-- Vector store is rebuilt on each deployment (or use GitHub Actions to update)
+`.github/workflows/data-refresh.yml` runs daily:
+- Collects data
+- Rebuilds the vector store
+- Commits any updates
 
-### For Other Platforms:
-- Consider using cloud storage (S3, Google Cloud Storage) for data files
-- Use managed vector databases (Pinecone, Weaviate) for production
-- Update `vector_store.py` to use cloud storage
+Add `OPENAI_API_KEY` as a repository secret to enable the workflow.
 
-## Production Considerations
+## Updating the Frontend
 
-### 1. Data Persistence
-- For production, store data in cloud storage (S3, GCS)
-- Use managed vector databases (Pinecone, Weaviate, Qdrant)
-- Update code to fetch from cloud storage on startup
-
-### 2. Caching
-- Add caching for frequent queries
-- Use Redis or similar for response caching
-- Cache vector store searches
-
-### 3. Rate Limiting
-- Implement rate limiting for API calls
-- Add request throttling
-- Monitor API usage
-
-### 4. Monitoring
-- Add logging and error tracking
-- Monitor OpenAI API usage
-- Track user queries and responses
-
-### 5. Scaling
-- Use load balancer for multiple instances
-- Consider async processing for data collection
-- Use message queue for background tasks
+1. Modify `docs/index.html`
+2. Commit and push
+3. GitHub Pages redeploys automatically
 
 ## Troubleshooting
 
-### Data Collection Fails
-- Check internet connectivity
-- Verify source URLs are accessible
-- Check rate limiting on source websites
-- Review error logs
+- **Pages build fails**: check the Actions log
+- **API errors**: verify your backend deployment and environment variables
+- **First request slow**: data collection & vector store build happen on demand; subsequent calls are fast
 
-### Vector Store Issues
-- Ensure sufficient disk space
-- Check ChromaDB version compatibility
-- Verify embeddings are generated correctly
-
-### Deployment Issues
-- Check environment variables are set
-- Verify all dependencies are in requirements.txt
-- Check build logs for errors
-- Ensure Python version is compatible
-
-## Updating the App
-
-1. **Make changes locally**
-2. **Test locally**: `streamlit run app.py`
-3. **Commit and push**:
-   ```bash
-   git add .
-   git commit -m "Update: description of changes"
-   git push origin main
-   ```
-4. **Deploy automatically** (Streamlit Cloud) or manually trigger deployment
-
-## Support
-
-For deployment issues:
-- Check [Streamlit Cloud documentation](https://docs.streamlit.io/streamlit-community-cloud)
-- Review deployment logs
-- Check GitHub Actions logs for data refresh issues
+Happy shipping! 🚀
 

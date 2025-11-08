@@ -50,15 +50,16 @@ Build the vector database:
 python vector_store.py
 ```
 
-### Step 6: Run the App
+### Step 6: Open the Web UI
 
-Start the Streamlit application:
+Open the static frontend (`docs/index.html`) in your browser.  
+For local development, you can launch a simple server:
 
 ```bash
-streamlit run app.py
+python -m http.server 8080
 ```
 
-The app will open in your browser at `http://localhost:8501`
+Then navigate to `http://localhost:8080/docs/index.html`.
 
 ## Usage
 
@@ -140,12 +141,11 @@ OPENAI_API_KEY=sk-your-key-here
 
 To update the data from official sources:
 
-1. Use the sidebar button "🔄 Refresh Data & Rebuild" in the app, OR
-2. Run the commands again:
-   ```bash
-   python data_collector.py
-   python vector_store.py
-   ```
+Run the commands again:
+```bash
+python data_collector.py
+python vector_store.py
+```
 
 ## Support
 

@@ -1,3 +1,3 @@
-# System packages for Streamlit Cloud deployment
+# System packages for GitHub Pages / Vercel deployment (currently none)
 # Add any system-level dependencies here if needed
 

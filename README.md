@@ -56,22 +56,6 @@ See [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md) for detailed instructions.
 
 See [NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md) for detailed instructions.
 
-### Option 3: GitHub Pages + Streamlit Cloud
-
-**Deploy landing page on GitHub Pages:**
-1. Go to repository Settings → Pages
-2. Select "GitHub Actions" as source
-3. The landing page will deploy automatically
-
-**Deploy app on Streamlit Cloud:**
-1. Go to [share.streamlit.io](https://share.streamlit.io/)
-2. Connect your GitHub account
-3. Select this repository
-4. Add your `OPENAI_API_KEY` in Secrets
-5. Click Deploy!
-
-See [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md) for detailed instructions.
-
 ## Setup (Local Development)
 
 ### Prerequisites
@@ -113,13 +97,6 @@ python data_collector.py
 python vector_store.py
 ```
 
-7. **Run the Streamlit app:**
-```bash
-streamlit run app.py
-```
-
-The app will open in your browser at `http://localhost:8501`
-
 ### Alternative: Using Setup Script
 
 ```bash
@@ -158,7 +135,6 @@ For detailed step-by-step instructions, see [QUICKSTART.md](QUICKSTART.md)
 
 ```
 MutualFund-Facts-Assistant/
-├── app.py                  # Streamlit UI application
 ├── config.py              # Configuration settings
 ├── data_collector.py      # Web scraper for official sources
 ├── vector_store.py        # Vector database setup and management
@@ -240,9 +216,9 @@ MUTUAL FUND INVESTMENTS ARE SUBJECT TO MARKET RISKS. READ ALL SCHEME RELATED DOC
 ## Deployment
 
 This app can be deployed to:
-- **Streamlit Cloud** (Recommended - Free): See [DEPLOYMENT.md](DEPLOYMENT.md)
-- **Railway.app**: Modern deployment platform
-- **Render.com**: Free tier available
+- **GitHub Pages + Vercel** (recommended)
+- **GitHub Pages + Netlify**
+- **Railway.app** or **Render.com**
 
 For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 

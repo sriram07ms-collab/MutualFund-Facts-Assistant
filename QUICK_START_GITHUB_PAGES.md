@@ -1,142 +1,44 @@
-# 🚀 Quick Start: GitHub Pages Deployment
+# GitHub Pages Quick Start ✅
 
-## ✅ What's Already Done
+Deploy the frontend and connect it to the live Vercel backend in three steps.
 
-- ✅ Code pushed to GitHub
-- ✅ Landing page created (`docs/index.html`)
-- ✅ GitHub Actions workflow configured (`.github/workflows/pages.yml`)
-- ✅ Deployment documentation created
+## 1. Enable GitHub Pages
 
-## 📋 Next Steps (5 Minutes)
+1. Open repository settings → **Pages**
+2. Set **Source** to **GitHub Actions**
+3. Save and watch the **Deploy GitHub Pages** workflow in the **Actions** tab
 
-### Step 1: Enable GitHub Pages (2 minutes)
+Your site is published at:
+```
+https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/
+```
 
-1. **Go to Repository Settings**
-   - Visit: https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/settings/pages
+## 2. Backend API
 
-2. **Configure Pages**
-   - Under "Source", select: **GitHub Actions**
-   - Click **Save**
+The frontend already targets the shared Vercel deployment:
+```
+https://mutual-fund-facts-assistant.vercel.app/api/query
+```
 
-3. **Verify Deployment**
-   - Go to **Actions** tab
-   - You'll see "Deploy GitHub Pages" workflow running
-   - Wait 1-2 minutes for deployment to complete
+If you deploy your own backend, edit `docs/index.html` and update:
+```javascript
+const API_URL = 'https://your-backend.vercel.app/api/query';
+```
 
-4. **Access Your Site**
-   - Your landing page will be live at:
-     ```
-     https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/
-     ```
+## 3. Test the Chat
 
-### Step 2: Deploy Streamlit App (3 minutes)
+Open the GitHub Pages URL, ask a question, and verify you receive a response with citations.
 
-1. **Go to Streamlit Cloud**
-   - Visit: https://share.streamlit.io/
-   - Sign in with your GitHub account
+## Optional Enhancements
 
-2. **Create New App**
-   - Click **"New app"** button
-   - Repository: `sriram07ms-collab/MutualFund-Facts-Assistant`
-   - Branch: `main`
-   - Main file path: `app.py`
+- Customize copy or styling in `docs/index.html`
+- Deploy your own backend via Vercel/Netlify (see `backend-deployment-setup.md`)
 
-3. **Add Secrets**
-   - Click **"Advanced settings"**
-   - Under **"Secrets"**, add:
-     ```
-     OPENAI_API_KEY=your_openai_api_key_here
-     ```
-   - Replace with your actual OpenAI API key
-   - Click **"Save"**
+## Troubleshooting
 
-4. **Deploy**
-   - Click **"Deploy"** button
-   - Wait 2-3 minutes for initial deployment
-   - Note your app URL (e.g., `https://mutualfund-facts-assistant.streamlit.app`)
+- **Pages workflow failed?** Check the run log in the Actions tab
+- **API error?** Confirm your backend is responding and the `API_URL` is correct
+- **Stale page?** Hard refresh or clear cache
 
-### Step 3: Update Landing Page Link (1 minute)
-
-1. **Edit the HTML File**
-   - Go to: https://github.com/sriram07ms-collab/MutualFund-Facts-Assistant/edit/main/docs/index.html
-   - Find line with: `const streamlitUrl = 'https://mutualfund-facts-assistant.streamlit.app';`
-   - Replace with your actual Streamlit Cloud URL
-   - Click **"Commit changes"**
-
-2. **Automatic Update**
-   - GitHub Pages will automatically redeploy
-   - Your landing page will link to the correct app
-
-## 🎉 You're Done!
-
-After completing these steps, you'll have:
-
-1. **GitHub Pages Landing Page:**
-   - URL: `https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/`
-   - Beautiful landing page with app link
-
-2. **Streamlit Cloud App:**
-   - Your app URL (from Step 2)
-   - Full RAG chatbot functionality
-   - Real-time data updates
-
-## 📊 What You Get
-
-- ✅ Professional landing page on GitHub Pages
-- ✅ Direct link to Streamlit app
-- ✅ Automatic deployment on code updates
-- ✅ Free hosting for both
-- ✅ Mobile-responsive design
-- ✅ Beautiful Groww-inspired UI
-
-## 🔄 Automatic Updates
-
-- **GitHub Pages**: Updates automatically when you push to `main` branch
-- **Streamlit Cloud**: Updates automatically when you push to `main` branch
-- **Data Refresh**: Daily automatic updates via GitHub Actions
-
-## 🐛 Troubleshooting
-
-### GitHub Pages Not Showing
-
-1. Check **Actions** tab for deployment status
-2. Wait 2-3 minutes after enabling Pages
-3. Clear browser cache (Ctrl+Shift+R)
-
-### Streamlit App Not Working
-
-1. Verify `OPENAI_API_KEY` is set in Streamlit Cloud secrets
-2. Check app logs in Streamlit Cloud dashboard
-3. Wait for first-time data collection (5-10 minutes)
-
-### Landing Page Link Not Working
-
-1. Verify Streamlit app is deployed
-2. Update the URL in `docs/index.html`
-3. Wait for GitHub Pages to redeploy
-
-## 📚 More Help
-
-- Detailed guide: [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
-- Streamlit deployment: [STREAMLIT_CLOUD_SETUP.md](STREAMLIT_CLOUD_SETUP.md)
-- General deployment: [DEPLOYMENT.md](DEPLOYMENT.md)
-
-## ✅ Checklist
-
-- [ ] GitHub Pages enabled in repository settings
-- [ ] Landing page accessible at GitHub Pages URL
-- [ ] Streamlit app deployed on Streamlit Cloud
-- [ ] `OPENAI_API_KEY` added to Streamlit Cloud secrets
-- [ ] Landing page link updated with Streamlit app URL
-- [ ] Both sites working correctly
-
-## 🎊 Congratulations!
-
-Your Mutual Fund Facts Assistant is now live with:
-- Professional landing page
-- Full-featured chatbot app
-- Automatic deployments
-- Real-time data updates
-
-Share your landing page URL with others to get started! 🚀
+Done! 🚀
 
