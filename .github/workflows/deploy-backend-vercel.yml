@@ -13,68 +13,69 @@ on:
       - 'requirements.txt'
   workflow_dispatch:
 
-env:
-  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORGID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECTID }}
-  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
 jobs:
-  skip:
-    if: ${{ !(env.VERCEL_TOKEN && env.VERCEL_ORG_ID && env.VERCEL_PROJECT_ID) }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Skip deployment
-        run: |
-          echo "⚠️  Skipping Vercel deployment because required secrets are not configured."
-          echo "Set VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, and OPENAI_API_KEY to enable this workflow."
-
   deploy:
-    if: ${{ env.VERCEL_TOKEN && env.VERCEL_ORG_ID && env.VERCEL_PROJECT_ID }}
     runs-on: ubuntu-latest
     name: Deploy Backend API to Vercel
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORGID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECTID }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     
     steps:
+    - name: Check required secrets
+      id: secrets_check
+      shell: bash
+      run: |
+        missing="false"
+        if [ -z "${VERCEL_TOKEN}" ] || [ -z "${VERCEL_ORG_ID}" ] || [ -z "${VERCEL_PROJECT_ID}" ]; then
+          missing="true"
+        fi
+        echo "missing=$missing" >> "$GITHUB_OUTPUT"
+
+    - name: Skip deployment
+      if: ${{ steps.secrets_check.outputs.missing == 'true' }}
+      run: |
+        echo "⚠️  Skipping Vercel deployment because required secrets are not configured."
+        echo "Set VERCEL_TOKEN, VERCEL_ORGID, VERCEL_PROJECTID, and OPENAI_API_KEY to enable this workflow."
+        exit 0
+
     - name: Checkout code
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
       uses: actions/checkout@v4
     
     - name: Setup Node.js
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
       uses: actions/setup-node@v4
       with:
         node-version: '18'
     
     - name: Install Vercel CLI
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
       run: npm install -g vercel@latest
     
     - name: Pull Vercel Environment Information
-      run: vercel pull --yes --environment=production --token=${{ env.VERCEL_TOKEN }}
-      env:
-        VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
-        VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
+      run: vercel pull --yes --environment=production --token="${{ env.VERCEL_TOKEN }}"
     
     - name: Build Project Artifacts
-      run: vercel build --prod --token=${{ env.VERCEL_TOKEN }}
-      env:
-        VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
-        VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
-        OPENAI_API_KEY: ${{ env.OPENAI_API_KEY }}
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
+      run: vercel build --prod --token="${{ env.VERCEL_TOKEN }}"
     
     - name: Deploy Project Artifacts to Vercel
-      run: vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }}
-      env:
-        VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
-        VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
+      run: vercel deploy --prebuilt --prod --token="${{ env.VERCEL_TOKEN }}"
     
     - name: Get Deployment URL
       id: vercel
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
       run: |
-        DEPLOYMENT_URL=$(vercel ls --token=${{ env.VERCEL_TOKEN }} | grep -oP 'https://[^\s]+' | head -1)
+        DEPLOYMENT_URL=$(vercel ls --token="${{ env.VERCEL_TOKEN }}" | grep -oP 'https://[^\s]+' | head -1)
         echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
-      env:
-        VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
-        VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
     
     - name: Update Frontend with API URL
+      if: ${{ steps.secrets_check.outputs.missing != 'true' }}
       run: |
         echo "✅ Backend deployed successfully!"
         echo "API URL: ${{ steps.vercel.outputs.url }}/api/query"
