@@ -23,7 +23,18 @@ This assistant covers:
 
 ## 🚀 Quick Deploy
 
-### Option 1: Vercel (Recommended - Full Stack)
+### Option 1: GitHub Pages (Recommended - Frontend)
+
+**Deploy frontend on GitHub Pages (Free):**
+1. Go to repository Settings → Pages
+2. Select "GitHub Actions" as source
+3. Your site: `https://sriram07ms-collab.github.io/MutualFund-Facts-Assistant/`
+
+**Note:** For full chat functionality, deploy backend API on Vercel/Netlify separately.
+
+See [GITHUB_PAGES_QUICK_START.md](GITHUB_PAGES_QUICK_START.md) for quick setup.
+
+### Option 2: Vercel (Full Stack)
 
 **Deploy on Vercel (Free):**
 1. Go to [vercel.com](https://vercel.com/)
